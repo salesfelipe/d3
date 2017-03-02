@@ -17,6 +17,10 @@
       stroke: #fff;
       stroke-width: 0.8px;
     }
+    body {
+    	/background-color: #393E46; 
+    }
+     
 	</style>
 </head>
 <body>
@@ -37,7 +41,7 @@
 			</div>
 		</div>
 		<header>
-			<h1>População x PIB</h1>
+			<h1>População x Demanda de água</h1>
 		</header>
 
 		<div id="chart"></div>
@@ -78,7 +82,7 @@
     var path = d3.geoPath().projection(projection);
 
     var populacaoScale = d3.scaleThreshold();
-    var demandaScale = d3.scaleLinear();
+    var demandaScale = d3.scaleThreshold();
 
 		d3.queue()
 			.defer(d3.json, "data/topo_pb.json")
@@ -92,10 +96,10 @@
 
 			populacaoScale
       	.domain([5000, 10000, 30000, 50000, 100000])
-				.range([d3.rgb(8, 48, 107, 0.2), d3.rgb(8, 48, 107, 0.4), d3.rgb(8, 48, 107, 0.6), d3.rgb(8, 48, 107, 0.8), d3.rgb(8, 48, 107, 1)]);
+				.range([d3.rgb(202,0,32, 0.2), d3.rgb(202,0,32, 0.4), d3.rgb(202,0,32, 0.6), d3.rgb(202,0,32, 0.8), d3.rgb(202,0,32, 1)]);
 			demandaScale
-        .domain([d3.min(populacaoXdemanda, function(d) { return +d.demanda }), d3.max(populacaoXdemanda, function(d) { return +d.demanda })])
-    		.range(d3.schemeOranges[9]);
+        .domain([50, 100, 200, 300, 1000])
+				.range([d3.rgb(5,113,176, 0.2), d3.rgb(5,113,176, 0.4), d3.rgb(5,113,176, 0.6), d3.rgb(5,113,176, 0.8), d3.rgb(5,113,176, 1)]);
 
       svg.selectAll(".municipios")
         .data(municipios.features)
@@ -104,7 +108,7 @@
         .attr("d", path)
         .style("opacity", 0.5);
 
-      svg.selectAll(".municipios")
+        svg.selectAll(".municipios")
         .data(municipios.features)
       .enter().append("path")
         .attr("id", function(d) { return "demanda-"+d.properties.codigo_ibg; })
@@ -117,6 +121,8 @@
 				svg.select("#demanda-"+populacaoXdemanda[i].id)
 					.attr("fill", demandaScale(+populacaoXdemanda[i].demanda));
 			}
+
+      
     }
 		</script>
 
